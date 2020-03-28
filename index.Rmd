@@ -97,17 +97,6 @@ valueBox(
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 ### death {.value-box}
 
 ```{r}
@@ -226,8 +215,8 @@ Comparación
 =======================================================================
 
 
-Column {data-width=400}
--------------------------------------
+<!-- Column {data-width=400} -->
+<!-- ------------------------------------- -->
 
 
 ### **Casos diarios registrados**
@@ -298,6 +287,16 @@ comparativo_provincias <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronaviru
 #colnames(comparativo_provincias)
 
 library(viridis)
+
+l <- list(
+  font = list(
+    family = "sans-serif",
+    size = 8,
+    color = "#000"),
+  bgcolor = "#E2E2E2",
+  bordercolor = "#FFFFFF",
+  borderwidth = 2)
+
 comparativo_provincias %>% ###### daily_confirmed
   plotly::plot_ly() %>%
   plotly::add_trace(
@@ -540,7 +539,7 @@ comparativo_provincias %>% ###### daily_confirmed
   
   plotly::layout(
     title = "",
-    legend = list(x = 0.1, y = 0.9),
+    legend = l, #list(x = 0.1, y = 0.9),
     yaxis = list(title = "Número de casos confirmados"),
     xaxis = list(title = "Fecha",  type = 'date'),
     # paper_bgcolor = "black",
