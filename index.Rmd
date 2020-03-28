@@ -17,6 +17,7 @@ library(flexdashboard)
 library(coronavirus)
 data(coronavirus)
 update_datasets()
+
 # View(coronavirus)
 # max(coronavirus$date)
 
@@ -67,14 +68,14 @@ df <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tabla
 #     # recovered_cum = cumsum(recovered),
 #     active_cum = cumsum(active)
 #   )
-df_daily <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df_daily.csv")
+df_daily <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df_daily.csv", sep="\t")
 
 # df1 <- coronavirus %>% dplyr::filter(date == max(date))
 df1 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df1.csv")
 
 ```
 
-Summary
+Resumen
 =======================================================================
 
 Row {data-width=400}
@@ -86,7 +87,7 @@ Row {data-width=400}
 
 valueBox(
   value = paste(format(sum(df$confirmed), big.mark = ","), "", sep = " "),
-  caption = "Total confirmed cases",
+  caption = "Total de casos confirmados",
   icon = "fas fa-user-md",
   color = confirmed_color
 )
@@ -117,7 +118,7 @@ valueBox(
     "%)",
     sep = ""
   ),
-  caption = "Death cases (death rate)",
+  caption = "Casos de muerte (tasa de mortalidad)",
   icon = "fas fa-heart-broken",
   color = death_color
 )
@@ -127,9 +128,10 @@ valueBox(
 Row
 -----------------------------------------------------------------------
 
-### **Daily cumulative cases by type** (Argentina only)
+### **Casos acumulados diarios por tipo** (solo Chubut)
     
 ```{r}
+
 plotly::plot_ly(data = df_daily) %>%
   plotly::add_trace(
     x = ~date,
@@ -138,7 +140,7 @@ plotly::plot_ly(data = df_daily) %>%
     type = "scatter",
     mode = "lines+markers",
     # name = "Active",
-    name = "Confirmed",
+    name = "Confirmados",
     line = list(color = active_color),
     marker = list(color = active_color)
   ) %>%
@@ -147,63 +149,80 @@ plotly::plot_ly(data = df_daily) %>%
     y = ~death_cum,
     type = "scatter",
     mode = "lines+markers",
-    name = "Death",
+    name = "Muertes",
     line = list(color = death_color),
     marker = list(color = death_color)
   ) %>%
   plotly::add_annotations(
-    x = as.Date("2020-02-04"),
-    y = 1,
-    text = paste("First case"),
+    x = as.Date("2020-03-03"),
+    y = 0.1,
+    text = paste("Primer caso<br>en Argentina"),
     xref = "x",
     yref = "y",
     arrowhead = 5,
     arrowhead = 3,
     arrowsize = 1,
     showarrow = TRUE,
-    ax = -10,
-    ay = -90
+    ax = 2,
+    ay = -70
   ) %>%
-  plotly::add_annotations(
-    x = as.Date("2020-03-11"),
-    y = 3,
-    text = paste("First death"),
-    xref = "x",
-    yref = "y",
-    arrowhead = 5,
-    arrowhead = 3,
-    arrowsize = 1,
-    showarrow = TRUE,
-    ax = -90,
-    ay = -90
-  ) %>%
-  plotly::add_annotations(
-    x = as.Date("2020-03-18"),
-    y = 14,
-    text = paste(
-      "New containment",
-      "",
-      "measures"
-    ),
-    xref = "x",
-    yref = "y",
-    arrowhead = 5,
-    arrowhead = 3,
-    arrowsize = 1,
-    showarrow = TRUE,
-    ax = -10,
-    ay = -90
-  ) %>%
+  # plotly::add_annotations(
+  #   x = as.Date("2020-02-04"),
+  #   y = 1,
+  #   text = paste("First case"),
+  #   xref = "x",
+  #   yref = "y",
+  #   arrowhead = 5,
+  #   arrowhead = 3,
+  #   arrowsize = 1,
+  #   showarrow = TRUE,
+  #   ax = -10,
+  #   ay = -90
+  # ) %>%
+  # plotly::add_annotations(
+  #   x = as.Date("2020-03-11"),
+  #   y = 3,
+  #   text = paste("First death"),
+  #   xref = "x",
+  #   yref = "y",
+  #   arrowhead = 5,
+  #   arrowhead = 3,
+  #   arrowsize = 1,
+  #   showarrow = TRUE,
+  #   ax = -90,
+  #   ay = -90
+  # ) %>%
+  # plotly::add_annotations(
+  #   x = as.Date("2020-03-18"),
+  #   y = 14,
+  #   text = paste(
+  #     "New containment",
+  #     "",
+  #     "measures"
+  #   ),
+  #   xref = "x",
+  #   yref = "y",
+  #   arrowhead = 5,
+  #   arrowhead = 3,
+  #   arrowsize = 1,
+  #   showarrow = TRUE,
+  #   ax = -10,
+  #   ay = -90
+  # ) %>%
   plotly::layout(
     title = "",
-    yaxis = list(title = "Cumulative number of cases"),
-    xaxis = list(title = "Date"),
+    yaxis = list(title = "Número acumulado de casos", range = c(-0.1,5)),
+    #xaxis = list(title = "Fecha"),
+    xaxis = list(
+        type = 'date',
+        title = "Fecha"),#,
+        #tickformat = "%d %B (%a)<br>%Y"),
     legend = list(x = 0.1, y = 0.9),
     hovermode = "compare"
   )
 ```
 
-Comparison
+Comparación
 =======================================================================
 
 
@@ -211,7 +230,7 @@ Column {data-width=400}
 -------------------------------------
 
 
-### **Daily new confirmed cases**
+### **Casos diarios registrados**
     
 ```{r}
 # daily_confirmed <- coronavirus %>%
@@ -325,7 +344,7 @@ comparativo_provincias %>% ###### daily_confirmed
     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
     mode = "none", ####lines+markers
     stackgroup = 'one',
-    fillcolor = viridis(24)[5],
+    fillcolor = "darkred",#viridis(24)[5],
     name = "Chubut"
   ) %>%
   
@@ -522,8 +541,8 @@ comparativo_provincias %>% ###### daily_confirmed
   plotly::layout(
     title = "",
     legend = list(x = 0.1, y = 0.9),
-    yaxis = list(title = "Number of new confirmed cases"),
-    xaxis = list(title = "Date"),
+    yaxis = list(title = "Número de casos confirmados"),
+    xaxis = list(title = "Fecha",  type = 'date'),
     # paper_bgcolor = "black",
     # plot_bgcolor = "black",
     # font = list(color = 'white'),
@@ -602,10 +621,9 @@ comparativo_provincias %>% ###### daily_confirmed
 Mapa Chubut
 =======================================================================
 
-### **World map of cases** (*use + and - icons to zoom in/out*)
+### **Casos en Chubut** (*use los iconos + y - para acercar / alejar*)
 
 ```{r}
-# map tab added by Art Steinmetz
 library(leaflet)
 library(leafpop)
 library(purrr)
@@ -614,15 +632,22 @@ df2 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tabl
 df2$Long <- as.numeric(paste(df2$Long))
 df2$Lat <- as.numeric(paste(df2$Lat))
 
-cv_data_for_plot <- df2 %>%
-  # dplyr::filter(Country.Region == "Argentina") %>%
-  dplyr::filter(cases > 0) %>%
-  dplyr::group_by(Country.Region, Province.State, Lat, Long, type) %>%
-  dplyr::summarise(cases = sum(cases)) %>%
-  dplyr::mutate(log_cases = 2 * log(cases)) %>%
-  dplyr::ungroup()
-cv_data_for_plot.split <- cv_data_for_plot %>% split(cv_data_for_plot$type)
-pal <- colorFactor(c("orange", "red", "green"), domain = c("confirmed", "death", "recovered"))
+#unique(df2$type)
+
+# cv_data_for_plot <- df2 %>%
+#   # dplyr::filter(Country.Region == "Argentina") %>%
+#   dplyr::filter(cases > 0) %>%
+#   dplyr::group_by(Country.Region, Province.State, Lat, Long, type) %>%
+#   dplyr::summarise(cases = sum(cases)) %>%
+#   dplyr::mutate(log_cases = 2 * log(cases)) %>%
+#   dplyr::ungroup()
+cv_data_for_plot.split <- df2 %>% split(df2$type)
+pal <- colorFactor(c("blue", "green", "yellow", "purple", "brown", "orange"), domain = c("Casos Sospechosos con Nexo Epidemiológico",     
+                                                           "Casos Sospechosos IRAG sin Nexo Epidemiológico",
+                                                           "Casos Confirmados",                             
+                                                           "Casos Descartados",                             
+                                                           "Contactos Estrechos de casos confirmados",
+                                                           "Viajeros con Aislamiento Preventivo"))#"confirmed", "death", "recovered"))
 map_object <- leaflet() %>% addProviderTiles(providers$Stamen.Toner)
 names(cv_data_for_plot.split) %>%
   purrr::walk(function(df) {
@@ -634,11 +659,11 @@ names(cv_data_for_plot.split) %>%
         color = ~ pal(type),
         stroke = FALSE,
         fillOpacity = 0.8,
-        radius = ~log_cases,
+        radius = ~log_cases, #log_cases
         popup = leafpop::popupTable(cv_data_for_plot.split[[df]],
-          feature.id = FALSE,
-          row.numbers = FALSE,
-          zcol = c("type", "cases", "Country.Region", "Province.State")
+                                    feature.id = FALSE,
+                                    row.numbers = FALSE,
+                                    zcol = c("type", "cases", "Country.Region", "Province.State")
         ),
         group = df,
         #                 clusterOptions = markerClusterOptions(removeOutsideVisibleBounds = F),
@@ -650,10 +675,11 @@ names(cv_data_for_plot.split) %>%
   })
 
 map_object %>%
-  addLayersControl(
+  addLayersControl(position = "bottomright",
     overlayGroups = names(cv_data_for_plot.split),
     options = layersControlOptions(collapsed = FALSE)
-  )
+  ) %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")
+###"", "", "Casos Confirmados","", "","")
 ```
 
 
@@ -661,7 +687,7 @@ map_object %>%
 Mapa País
 =======================================================================
 
-### **World map of cases** (*use + and - icons to zoom in/out*)
+### **Casos en Argentina** (*use los iconos + y - para acercar / alejar*)
 
 ```{r}
 # map tab added by Art Steinmetz
@@ -693,7 +719,7 @@ names(cv_data_for_plot.split) %>%
         color = ~ pal(type),
         stroke = FALSE,
         fillOpacity = 0.8,
-        radius = ~log_cases,
+        radius = ~log_cases*1.5,
         popup = leafpop::popupTable(cv_data_for_plot.split[[df]],
           feature.id = FALSE,
           row.numbers = FALSE,
