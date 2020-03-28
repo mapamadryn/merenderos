@@ -215,7 +215,7 @@ plotly::plot_ly(data = df_daily) %>%
     #xaxis = list(title = "Fecha"),
     xaxis = list(
         type = 'date',
-        title = "Fecha"),#,
+        title = "Fecha"),#, 
         #tickformat = "%d %B (%a)<br>%Y"),
     legend = list(x = 0.1, y = 0.9),
     hovermode = "compare"
@@ -648,14 +648,16 @@ pal <- colorFactor(c("blue", "green", "yellow", "purple", "brown", "orange"), do
                                                            "Casos Descartados",                             
                                                            "Contactos Estrechos de casos confirmados",
                                                            "Viajeros con Aislamiento Preventivo"))#"confirmed", "death", "recovered"))
-map_object <- leaflet() %>% addProviderTiles(providers$Stamen.Toner)
+
+
+map_object <- leaflet() %>% addProviderTiles(providers$Esri.WorldStreetMap)
 names(cv_data_for_plot.split) %>%
   purrr::walk(function(df) {
     map_object <<- map_object %>%
       addCircleMarkers(
         data = cv_data_for_plot.split[[df]],
         lng = ~Long, lat = ~Lat,
-        #                 label=~as.character(cases),
+        label=~as.character(cases), 
         color = ~ pal(type),
         stroke = FALSE,
         fillOpacity = 0.8,
@@ -678,7 +680,8 @@ map_object %>%
   addLayersControl(position = "bottomright",
     overlayGroups = names(cv_data_for_plot.split),
     options = layersControlOptions(collapsed = FALSE)
-  ) %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")
+  ) %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  %>%
+  addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)
 ###"", "", "Casos Confirmados","", "","")
 ```
 
@@ -707,8 +710,8 @@ cv_data_for_plot <- df1 %>%
   dplyr::mutate(log_cases = 2 * log(cases)) %>%
   dplyr::ungroup()
 cv_data_for_plot.split <- cv_data_for_plot %>% split(cv_data_for_plot$type)
-pal <- colorFactor(c("orange", "red", "green"), domain = c("confirmed", "death", "recovered"))
-map_object <- leaflet() %>% addProviderTiles(providers$Stamen.Toner)
+pal <- colorFactor(c("orange", "red", "green"), domain = c("confirmados", "muertos", "reuperados"))
+map_object <- leaflet() %>% addProviderTiles(providers$OpenStreetMap)  #### Stamen.Toner
 names(cv_data_for_plot.split) %>%
   purrr::walk(function(df) {
     map_object <<- map_object %>%
@@ -735,7 +738,7 @@ names(cv_data_for_plot.split) %>%
   })
 
 map_object %>%
-  addLayersControl(
+  addLayersControl(#position = "topright",
     overlayGroups = names(cv_data_for_plot.split),
     options = layersControlOptions(collapsed = FALSE)
   )
