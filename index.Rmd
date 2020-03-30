@@ -4,12 +4,14 @@ author:
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    social: menu
-    #social: ["facebook", "twitter", "linkedin"]
+    #social: menu
+    social: ["facebook", "twitter", "linkedin"]
     #source_code: embed
     vertical_layout: fill
     logo: logo - CENPAT_48x60.png
     favicon: logo - CENPAT_48x60.png
+
+
 ---
 
 
@@ -17,7 +19,7 @@ output:
 ```{r setup, include=FALSE}
 #------------------ Packages ------------------
 library(flexdashboard)
-# install.packages("devtools")
+# install.packages("devtools")                                                    navbar:      - { title: "Ministerio", href: "https://example.com/about", align: right }
 # devtools::install_github("RamiKrispin/coronavirus", force = TRUE)
 library(coronavirus)
 data(coronavirus)
@@ -701,7 +703,7 @@ library(plotly)
 #map_object
 
 map_object %>%
-  addLayersControl(position = "bottomright", 
+  addLayersControl(position = "topright", 
                    baseGroups = names(cv_data_for_plot.split),
                    options = layersControlOptions(collapsed = TRUE)
   ) %>% hideGroup("Casos Confirmados fuera de la provincia") %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  %>%
