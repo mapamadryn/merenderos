@@ -702,7 +702,7 @@ library(plotly)
 map_object %>%
   addLayersControl(position = "bottomright", 
                    baseGroups = names(cv_data_for_plot.split),
-                   options = layersControlOptions(collapsed = FALSE)
+                   options = layersControlOptions(collapsed = TRUE)
   ) %>% hideGroup("Casos Confirmados fuera de la provincia") %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  %>%
   addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)
 
