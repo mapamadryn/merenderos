@@ -228,7 +228,9 @@ Comparación
 
 ### **Casos diarios registrados**
 
-<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" />    
+<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" height="100%"/>    
+
+
 ```{r}
 # daily_confirmed <- coronavirus %>%              width="1200" height="1000"    max-width="100%" height="100%" margin ="0"
 #   dplyr::filter(type == "confirmed") %>%
@@ -640,7 +642,7 @@ library(sf)
 nc <- sf::st_read("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/Ministerio_Salud_Chubut/Chubut_poligonos_Areas_programaticas_coronavirus.shp", quiet = TRUE)
 
 
-df2 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df2.csv", sep="\t")
+df2 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df2.csv", sep=",")
 df2$Long <- as.numeric(paste(df2$Long))
 df2$Lat <- as.numeric(paste(df2$Lat))
 
