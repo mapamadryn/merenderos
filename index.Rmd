@@ -226,9 +226,9 @@ Comparación
 
 ### **Casos diarios registrados**
 
-<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif"  max-width="100%" height="100%" margin ="0" />    
+<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" />    
 ```{r}
-# daily_confirmed <- coronavirus %>%              width="1200" height="1000"
+# daily_confirmed <- coronavirus %>%              width="1200" height="1000"    max-width="100%" height="100%" margin ="0"
 #   dplyr::filter(type == "confirmed") %>%
 #   dplyr::filter(date >= "2020-02-29") %>%
 #   dplyr::mutate(country = Country.Region) %>%
