@@ -1,13 +1,18 @@
 ---
-title: "Coronavirus en Chubut"
-author: "CENPAT-CONICET"
+title: "Coronavirus en <br>Chubut"
+author: 
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    # social: ["facebook", "twitter", "linkedin"]
-    source_code: embed
+    social: menu
+    #social: ["facebook", "twitter", "linkedin"]
+    #source_code: embed
     vertical_layout: fill
+    logo: logo - CENPAT_48x60.png
+    favicon: logo - CENPAT_48x60.png
 ---
+
+
 
 ```{r setup, include=FALSE}
 #------------------ Packages ------------------
@@ -220,9 +225,9 @@ Comparación
 
 
 ### **Casos diarios registrados**
-    
+<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif"  />    
 ```{r}
-# daily_confirmed <- coronavirus %>%
+# daily_confirmed <- coronavirus %>%              width="1200" height="1000"
 #   dplyr::filter(type == "confirmed") %>%
 #   dplyr::filter(date >= "2020-02-29") %>%
 #   dplyr::mutate(country = Country.Region) %>%
@@ -283,278 +288,278 @@ Comparación
 #   )
 
 
-comparativo_provincias <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/comparativo_provincias_acumulados.csv", sep= ";")
-#colnames(comparativo_provincias)
-
-library(viridis)
-
-l <- list(
-  font = list(
-    family = "sans-serif",
-    size = 8,
-    color = "#000"),
-  bgcolor = "#E2E2E2",
-  bordercolor = "#FFFFFF",
-  borderwidth = 2)
-
-comparativo_provincias %>% ###### daily_confirmed
-  plotly::plot_ly() %>%
-  plotly::add_trace(
-    x = ~date,
-    y = ~Ciudad.Autónoma.de.Buenos.Aires,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[1],
-    name = "Ciudad Autónoma de Buenos Aires"
-  ) %>%
-  plotly::add_trace(
-    x = ~date,
-    y = ~Buenos.Aires,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[2],
-    name = "Buenos.Aires"
-  ) %>%
-  plotly::add_trace(
-    x = ~date,
-    y = ~Catamarca,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[3],
-    name = "Catamarca"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Chaco,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[4],
-    name = "Chaco"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Chubut,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = "darkred",#viridis(24)[5],
-    name = "Chubut"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Córdoba,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[6],
-    name = "Córdoba"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Corrientes,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[7],
-    name = "Corrientes"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Entre.Ríos,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[8],
-    name = "Entre Ríos"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Formosa,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[9],
-    name = "Formosa"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Jujuy,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[10],
-    name = "Jujuy"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~La.Pampa,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[11],
-    name = "La Pampa"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~La.Rioja,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[12],
-    name = "La Rioja"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Mendoza,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[13],
-    name = "Mendoza"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Misiones,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[14],
-    name = "Misiones"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Neuquén,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[15],
-    name = "Neuquén"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Río.Negro,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[16],
-    name = "Río Negro"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Salta,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[17],
-    name = "Salta"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~San.Juan,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[18],
-    name = "San Juan"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~San.Luis,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[19],
-    name = "San Luis"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Santa.Cruz,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[20],
-    name = "Santa Cruz"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Santa.Fe,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[21],
-    name = "Santa Fe"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Santiago.del.Estero,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[22],
-    name = "Santiago del Estero"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Tierra.del.Fuego,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[23],
-    name = "Tierra del Fuego"
-  ) %>%
-  
-  plotly::add_trace(
-    x = ~date,
-    y = ~Tucumán,
-    type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
-    mode = "none", ####lines+markers
-    stackgroup = 'one',
-    fillcolor = viridis(24)[24],
-    name = "Tucumán"
-  ) %>%
-  
-  plotly::layout(
-    title = "",
-    legend = l, #list(x = 0.1, y = 0.9),
-    yaxis = list(title = "Número de casos confirmados"),
-    xaxis = list(title = "Fecha",  type = 'date'),
-    # paper_bgcolor = "black",
-    # plot_bgcolor = "black",
-    # font = list(color = 'white'),
-    hovermode = "compare",
-    margin = list(
-      # l = 60,
-      # r = 40,
-      b = 10,
-      t = 10,
-      pad = 2
-    )
-  )
-
+# comparativo_provincias <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/comparativo_provincias_acumulados.csv", sep= ";")
+# #colnames(comparativo_provincias)
+# 
+# library(viridis)
+# 
+# l <- list(
+#   font = list(
+#     family = "sans-serif",
+#     size = 8,
+#     color = "#000"),
+#   bgcolor = "#E2E2E2",
+#   bordercolor = "#FFFFFF",
+#   borderwidth = 2)
+# 
+# comparativo_provincias %>% ###### daily_confirmed
+#   plotly::plot_ly() %>%
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Ciudad.Autónoma.de.Buenos.Aires,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[1],
+#     name = "Ciudad Autónoma de Buenos Aires"
+#   ) %>%
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Buenos.Aires,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[2],
+#     name = "Buenos.Aires"
+#   ) %>%
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Catamarca,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[3],
+#     name = "Catamarca"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Chaco,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[4],
+#     name = "Chaco"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Chubut,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = "darkred",#viridis(24)[5],
+#     name = "Chubut"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Córdoba,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[6],
+#     name = "Córdoba"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Corrientes,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[7],
+#     name = "Corrientes"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Entre.Ríos,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[8],
+#     name = "Entre Ríos"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Formosa,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[9],
+#     name = "Formosa"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Jujuy,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[10],
+#     name = "Jujuy"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~La.Pampa,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[11],
+#     name = "La Pampa"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~La.Rioja,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[12],
+#     name = "La Rioja"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Mendoza,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[13],
+#     name = "Mendoza"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Misiones,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[14],
+#     name = "Misiones"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Neuquén,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[15],
+#     name = "Neuquén"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Río.Negro,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[16],
+#     name = "Río Negro"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Salta,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[17],
+#     name = "Salta"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~San.Juan,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[18],
+#     name = "San Juan"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~San.Luis,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[19],
+#     name = "San Luis"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Santa.Cruz,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[20],
+#     name = "Santa Cruz"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Santa.Fe,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[21],
+#     name = "Santa Fe"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Santiago.del.Estero,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[22],
+#     name = "Santiago del Estero"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Tierra.del.Fuego,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[23],
+#     name = "Tierra del Fuego"
+#   ) %>%
+#   
+#   plotly::add_trace(
+#     x = ~date,
+#     y = ~Tucumán,
+#     type = "scatter",  #, type = 'scatter', mode = 'none', stackgroup = 'one', fillcolor = '#F5FF8D')
+#     mode = "none", ####lines+markers
+#     stackgroup = 'one',
+#     fillcolor = viridis(24)[24],
+#     name = "Tucumán"
+#   ) %>%
+#   
+#   plotly::layout(
+#     title = "",
+#     legend = l, #list(x = 0.1, y = 0.9),
+#     yaxis = list(title = "Número de casos confirmados"),
+#     xaxis = list(title = "Fecha",  type = 'date'),
+#     # paper_bgcolor = "black",
+#     # plot_bgcolor = "black",
+#     # font = list(color = 'white'),
+#     hovermode = "compare",
+#     margin = list(
+#       # l = 60,
+#       # r = 40,
+#       b = 10,
+#       t = 10,
+#       pad = 2
+#     )
+#   )
+# 
 
 ```
  
@@ -700,7 +705,7 @@ map_object %>%
                    options = layersControlOptions(collapsed = FALSE)
   ) %>% hideGroup("Casos Confirmados fuera de la provincia") %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  %>%
   addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)
-###"", "", "Casos Confirmados","", "","")
+
 ```
 
 
@@ -771,38 +776,38 @@ map_object %>%
 
 
 
-About
-=======================================================================
+<!-- About -->
+<!-- ======================================================================= -->
 
-**The Coronavirus Dashboard: the case of Argentina**
+<!-- **The Coronavirus Dashboard: the case of Argentina** -->
 
-This Coronavirus dashboard: the case of Argentina provides an overview of the 2019 Novel Coronavirus COVID-19 (2019-nCoV) epidemic for Argentina. This dashboard is built with R using the R Makrdown framework and was adapted from this [dashboard](https://ramikrispin.github.io/coronavirus_dashboard/){target="_blank"} by Rami Krispin.
+<!-- This Coronavirus dashboard: the case of Argentina provides an overview of the 2019 Novel Coronavirus COVID-19 (2019-nCoV) epidemic for Argentina. This dashboard is built with R using the R Makrdown framework and was adapted from this [dashboard](https://ramikrispin.github.io/coronavirus_dashboard/){target="_blank"} by Rami Krispin. -->
 
-**Code**
+<!-- **Code** -->
 
-The code behind this dashboard is available on [GitHub](https://github.com/AntoineSoetewey/coronavirus_dashboard){target="_blank"}.
+<!-- The code behind this dashboard is available on [GitHub](https://github.com/AntoineSoetewey/coronavirus_dashboard){target="_blank"}. -->
 
-**Data**
+<!-- **Data** -->
 
-The input data for this dashboard is the dataset available from the [`{coronavirus}`](https://github.com/RamiKrispin/coronavirus){target="_blank"} R package. Make sure to download the development version of the package to have the latest data:
+<!-- The input data for this dashboard is the dataset available from the [`{coronavirus}`](https://github.com/RamiKrispin/coronavirus){target="_blank"} R package. Make sure to download the development version of the package to have the latest data: -->
 
-```
-install.packages("devtools")
-devtools::install_github("RamiKrispin/coronavirus")
-```
+<!-- ``` -->
+<!-- install.packages("devtools") -->
+<!-- devtools::install_github("RamiKrispin/coronavirus") -->
+<!-- ``` -->
 
-The data and dashboard are refreshed on a daily basis.
+<!-- The data and dashboard are refreshed on a daily basis. -->
 
-The raw data is pulled from the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus [repository](https://github.com/RamiKrispin/coronavirus-csv){target="_blank"}.
+<!-- The raw data is pulled from the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus [repository](https://github.com/RamiKrispin/coronavirus-csv){target="_blank"}. -->
 
-**Contact**
+<!-- **Contact** -->
 
-For any question or feedback, you can [contact me](https://www.statsandr.com/contact/). More information about this dashboard can be found in this [article](https://www.statsandr.com/blog/how-to-create-a-simple-coronavirus-dashboard-specific-to-your-country-in-r/).
+<!-- For any question or feedback, you can [contact me](https://www.statsandr.com/contact/). More information about this dashboard can be found in this [article](https://www.statsandr.com/blog/how-to-create-a-simple-coronavirus-dashboard-specific-to-your-country-in-r/). -->
 
-**Update**
+<!-- **Update** -->
 
-The data is as of `r format(max(coronavirus$date), "%A %B %d, %Y")` and the dashboard has been updated on `r format(Sys.time(), "%A %B %d, %Y")`.
+<!-- The data is as of `r format(max(coronavirus$date), "%A %B %d, %Y")` and the dashboard has been updated on `r format(Sys.time(), "%A %B %d, %Y")`. -->
 
 
 
-*Go back to [www.statsandr.com](https://www.statsandr.com/) (blog) or [www.antoinesoetewey.com](https://www.antoinesoetewey.com/) (personal website)*.
+<!-- *Go back to [www.statsandr.com](https://www.statsandr.com/) (blog) or [www.antoinesoetewey.com](https://www.antoinesoetewey.com/) (personal website)*. -->
