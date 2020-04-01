@@ -37,6 +37,15 @@ active_color <- "#1f77b4"
 recovered_color <- "forestgreen"
 death_color <- "red"
 #------------------ Data ------------------
+
+#install.packages('gsheet')
+library(gsheet)
+totales_País <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1GYOS5gXpVJJZ42A5UhJHJa0_WVRTsAznJ0LCqt5i-Z8/edit?usp=sharing')
+
+totales_País$Fecha <- as.Date(totales_País$Fecha, format = "%d/%m/%Y")
+
+totales_País_mas_reciente <-totales_País %>% 
+  dplyr::filter(Fecha == max(Fecha))
 # df <- coronavirus %>%
 #   # dplyr::filter(date == max(date)) %>%
 #   dplyr::filter(Country.Region == "Argentina") %>%
@@ -316,14 +325,141 @@ map_object %>%
 Resumen País
 =======================================================================
 
+  Row {data-width=400}
+-----------------------------------------------------------------------
+### confirmed {.value-box}
+  
+```{r}
+valueBox(
+  value = paste(format(totales_País_mas_reciente$CasosAcum, big.mark = "."), "", sep = " "),
+  caption = "Total de casos confirmados",
+  icon = "fas fa-user-md",
+  color = confirmed_color
+)
+```
 
-<!-- Column {data-width=400} -->
-<!-- ------------------------------------- -->
 
 
+
+
+### death {.value-box}
+
+```{r}
+
+valueBox(
+  value = paste(format(totales_País_mas_reciente$FallecAcum, big.mark = "."), " (",
+                format(round(100 * totales_País_mas_reciente$FallecAcum / totales_País_mas_reciente$CasosAcum, 1), decimal.mark = ","),
+                "%)",
+                sep = ""
+  ),
+  caption = "Casos de muerte (tasa de mortalidad)",
+  icon = "fas fa-heart-broken",
+  color = death_color
+)
+```
+
+
+
+Row
+-----------------------------------------------------------------------
+  
 ### **Casos confirmados acumulados por provincia**
 
 <img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" height="100%"/>    
+
+
+
+
+### **Casos acumulados diarios** (todo el País)
+    
+```{r}
+plotly::plot_ly(data = totales_País) %>%
+  plotly::add_trace(
+    x = ~Fecha,
+    # y = ~active_cum,
+    y = ~CasosAcum,
+    type = "scatter",
+    mode = "lines+markers",
+    # name = "Active",
+    name = "Confirmados",
+    line = list(color = active_color),
+    marker = list(color = active_color)
+  ) %>%
+  plotly::add_trace(
+    x = ~Fecha,
+    y = ~FallecAcum,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Muertes",
+    line = list(color = death_color),
+    marker = list(color = death_color)
+  ) %>%
+  plotly::add_annotations(
+    x = as.Date("2020-03-03"),
+    y = 0.1,
+    text = paste("Primer caso<br>en Argentina"),
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 1,
+    showarrow = TRUE,
+    ax = 2,
+    ay = -70
+  ) %>%
+  # plotly::add_annotations(
+  #   x = as.Date("2020-02-04"),
+  #   y = 1,
+  #   text = paste("First case"),
+  #   xref = "x",
+  #   yref = "y",
+  #   arrowhead = 5,
+  #   arrowhead = 3,
+  #   arrowsize = 1,
+  #   showarrow = TRUE,
+  #   ax = -10,
+#   ay = -90
+# ) %>%
+# plotly::add_annotations(
+#   x = as.Date("2020-03-11"),
+#   y = 3,
+#   text = paste("First death"),
+#   xref = "x",
+#   yref = "y",
+#   arrowhead = 5,
+#   arrowhead = 3,
+#   arrowsize = 1,
+#   showarrow = TRUE,
+#   ax = -90,
+#   ay = -90
+# ) %>%
+# plotly::add_annotations(
+#   x = as.Date("2020-03-18"),
+#   y = 14,
+#   text = paste(
+#     "New containment",
+#     "",
+#     "measures"
+#   ),
+#   xref = "x",
+#   yref = "y",
+#   arrowhead = 5,
+#   arrowhead = 3,
+#   arrowsize = 1,
+#   showarrow = TRUE,
+#   ax = -10,
+#   ay = -90
+# ) %>%
+plotly::layout(
+  title = "",
+  yaxis = list(title = "Número acumulado de casos"), #range = c(-0.1,5)),
+  #xaxis = list(title = "Fecha"),
+  xaxis = list(type = 'date', title = "Fecha"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare")
+
+```
+
 
 
 Mapa País
