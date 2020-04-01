@@ -82,7 +82,7 @@ df1 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tabl
 
 ```
 
-Resumen <br> Chubut
+Resumen Chubut
 =======================================================================
 
 Row {data-width=400}
@@ -220,7 +220,7 @@ plotly::plot_ly(data = df_daily) %>%
 
 
 
-Mapa <br> Chubut
+Mapa Chubut
 =======================================================================
 
 
@@ -313,7 +313,7 @@ map_object %>%
 ```
 
 
-Resumen <br> País
+Resumen País
 =======================================================================
 
 
@@ -326,7 +326,7 @@ Resumen <br> País
 <img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" height="100%"/>    
 
 
-Mapa <br> País
+Mapa País
 =======================================================================
 
 ### **Casos en Argentina** (*use los iconos + y - para acercar / alejar*)
