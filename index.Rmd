@@ -264,24 +264,19 @@ df2$Lat <- as.numeric(paste(df2$Lat))
 #   dplyr::mutate(log_cases = 2 * log(cases)) %>%
 #   dplyr::ungroup()
 cv_data_for_plot.split <- df2 %>% split(df2$type)
-pal <- colorFactor(c("blue", "green", "red", "orange", "yellow", "purple", "brown"), domain = c("Casos Sospechosos con Nexo Epidemiológico",     
-                                                                                         "Casos Sospechosos IRAG sin Nexo Epidemiológico",
-                                                                                         "Casos Confirmados",
-                                                                                         "Casos Confirmados fuera de la provincia",
-                                                                                         "Casos Descartados",                             
-                                                                                         "Contactos Estrechos de casos confirmados",
-                                                                                         "Viajeros con Aislamiento Preventivo"))#"confirmed", "death", "recovered"))
+#pal <- colorFactor(c("blue", "green", "red", "orange", "yellow", "purple", "brown"), domain = c("Casos Sospechosos con Nexo Epidemiológico", "Casos Sospechosos IRAG sin Nexo Epidemiológico","Casos Confirmados", "Casos Confirmados fuera de la provincia", "Casos Sospechosos fuera de la provincia", "Casos Descartados", "Contactos Estrechos de casos confirmados", "Viajeros con Aislamiento Preventivo","Viajeros con Aislamiento Preventivo Finalizado"))#"confirmed", "death", "recovered"))
 
 pal_ap <- colorFactor(c("blue", "green", "yellow", "purple"), domain = c("A.P. Comodoro Rivadavia",     
-                                                                                         "A.P. Norte",
-                                                                                         "A.P. Trelew",                             
-                                                                                         "A.P. Esquel"))
+                                                                         "A.P. Norte",
+                                                                         "A.P. Trelew",                             
+                                                                         "A.P. Esquel"))
 
 map_object <- leaflet() %>% addProviderTiles(providers$Esri.WorldStreetMap) %>%  addPolygons(data = nc, 
-                                                                                        #fillColor = "aliceblue", 
-                                                                                        #color = "grey",
-                                                                                        label = ~NOMBRE,
-                                                                                        color = ~ pal_ap(NOMBRE), fillOpacity = 0.1) 
+                                                                                             #fillColor = "aliceblue", 
+                                                                                             #color = "grey",
+                                                                                             label = ~NOMBRE,
+                                                                                             color = ~ pal_ap(NOMBRE), fillOpacity = 0.1)
+
 names(cv_data_for_plot.split) %>%
   purrr::walk(function(df) {
     map_object <<- map_object %>% 
@@ -290,7 +285,7 @@ names(cv_data_for_plot.split) %>%
         lng = ~Long, lat = ~Lat,
         label=~as.character(cases),
         #textOnly = TRUE,
-        color = ~ pal(type),
+        #color = ~ pal(type),
         stroke = FALSE,
         fillOpacity = 0.8,
         radius = ~log_cases, #log_cases
@@ -304,21 +299,17 @@ names(cv_data_for_plot.split) %>%
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px", 'color'='black'),
                                     textsize = "15px", 
                                     direction = "auto", noHide = TRUE, offset=c(0,-12), textOnly = TRUE#,
-          #noHide = F,
-          #direction = "auto"
+                                    #noHide = F,
+                                    #direction = "auto"
         )
       )
   })
-library(plotly)
-#map_object
 
 map_object %>%
   addLayersControl(position = "topright", 
                    baseGroups = names(cv_data_for_plot.split),
-                   options = layersControlOptions(collapsed = TRUE)
-  ) %>% hideGroup("Casos Confirmados fuera de la provincia") %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  %>%
-  addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)
-
+                   options = layersControlOptions(collapsed = TRUE))%>%
+                  addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)# %>% hideGroup("Casos Confirmados fuera de la provincia") %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  
 ```
 
 
