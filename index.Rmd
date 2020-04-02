@@ -1,5 +1,5 @@
 ---
-title: "Coronavirus en <br>Chubut"
+title: "Situación de COVID-19 en Chubut"
 author: 
 output: 
   flexdashboard::flex_dashboard:
@@ -21,9 +21,9 @@ output:
 library(flexdashboard)
 # install.packages("devtools")                                                    navbar:      - { title: "Ministerio", href: "https://example.com/about", align: right }
 # devtools::install_github("RamiKrispin/coronavirus", force = TRUE)
-library(coronavirus)
-data(coronavirus)
-update_datasets()
+# library(coronavirus)
+# data(coronavirus)
+# update_datasets()
 
 # View(coronavirus)
 # max(coronavirus$date)
@@ -36,6 +36,8 @@ confirmed_color <- "purple"
 active_color <- "#1f77b4"
 recovered_color <- "forestgreen"
 death_color <- "red"
+
+
 #------------------ Data ------------------
 
 #install.packages('gsheet')
@@ -46,24 +48,25 @@ totales_País$Fecha <- as.Date(totales_País$Fecha, format = "%d/%m/%Y")
 
 totales_País_mas_reciente <-totales_País %>% 
   dplyr::filter(Fecha == max(Fecha))
-# df <- coronavirus %>%
-#   # dplyr::filter(date == max(date)) %>%
-#   dplyr::filter(Country.Region == "Argentina") %>%
-#   dplyr::group_by(Country.Region, type) %>%
-#   dplyr::summarise(total = sum(cases)) %>%
-#   tidyr::pivot_wider(
-#     names_from = type,
-#     values_from = total
-#   ) %>%
-#   # dplyr::mutate(unrecovered = confirmed - ifelse(is.na(recovered), 0, recovered) - ifelse(is.na(death), 0, death)) %>%
-#   dplyr::mutate(unrecovered = confirmed - ifelse(is.na(death), 0, death)) %>%
-#   dplyr::arrange(-confirmed) %>%
-#   dplyr::ungroup() %>%
-#   dplyr::mutate(country = dplyr::if_else(Country.Region == "United Arab Emirates", "UAE", Country.Region)) %>%
-#   dplyr::mutate(country = dplyr::if_else(country == "Mainland China", "China", country)) %>%
-#   dplyr::mutate(country = dplyr::if_else(country == "North Macedonia", "N.Macedonia", country)) %>%
-#   dplyr::mutate(country = trimws(country)) %>%
-#   dplyr::mutate(country = factor(country, levels = country))
+
+
+
+library(gsheet)
+informes_Chubut <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1b3NYFb2I9dUyJXmC6OucDTOpns4FQPWGaNt66opjw-A/edit?usp=sharing')
+
+informes_Chubut$Fecha <- as.Date(informes_Chubut$Fecha, format="%d/%m/%Y")
+informes_Chubut$confirmados_acum <- informes_Chubut$`Casos Confirmados acumulados`
+informes_Chubut$muertos_acum <- informes_Chubut$`Casos de muerte acumulados`
+
+informes_Chubut_mas_reciente  <- informes_Chubut %>% 
+  dplyr::filter(Fecha == max(Fecha))
+
+casos_confirmados_Chubut <- sum(informes_Chubut_mas_reciente$`Casos Confirmados`)
+casos_muerte_Chubut <- sum(informes_Chubut_mas_reciente$`Casos de muerte`)
+
+library(tidyr)
+informes_Chubut_mas_reciente <- gather(informes_Chubut_mas_reciente, Clase, Conteo, -Región, -Fecha)
+
 df <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df.csv")
 
 # df_daily <- coronavirus %>%
@@ -102,7 +105,7 @@ Row {data-width=400}
 ```{r}
 
 valueBox(
-  value = paste(format(sum(df$confirmed), big.mark = ","), "", sep = " "),
+  value = paste(format(casos_confirmados_Chubut, big.mark = ","), "", sep = " "),
   caption = "Total de casos confirmados",
   icon = "fas fa-user-md",
   color = confirmed_color
@@ -118,8 +121,8 @@ valueBox(
 ```{r}
 
 valueBox(
-  value = paste(format(sum(df$death, na.rm = TRUE), big.mark = ","), " (",
-    round(100 * sum(df$death, na.rm = TRUE) / sum(df$confirmed), 1),
+  value = paste(format(casos_muerte_Chubut, big.mark = "."), " (",
+    round(100 * casos_muerte_Chubut / casos_confirmados_Chubut, 1),
     "%)",
     sep = ""
   ),
@@ -137,11 +140,11 @@ Row
     
 ```{r}
 
-plotly::plot_ly(data = df_daily) %>%
+plotly::plot_ly(data = informes_Chubut) %>%
   plotly::add_trace(
-    x = ~date,
+    x = ~Fecha,
     # y = ~active_cum,
-    y = ~confirmed_cum,
+    y = ~confirmados_acum,
     type = "scatter",
     mode = "lines+markers",
     # name = "Active",
@@ -150,8 +153,8 @@ plotly::plot_ly(data = df_daily) %>%
     marker = list(color = active_color)
   ) %>%
   plotly::add_trace(
-    x = ~date,
-    y = ~death_cum,
+    x = ~Fecha,
+    y = ~muertos_acum,
     type = "scatter",
     mode = "lines+markers",
     name = "Muertes",
@@ -182,49 +185,49 @@ plotly::plot_ly(data = df_daily) %>%
   #   arrowsize = 1,
   #   showarrow = TRUE,
   #   ax = -10,
-  #   ay = -90
-  # ) %>%
-  # plotly::add_annotations(
-  #   x = as.Date("2020-03-11"),
-  #   y = 3,
-  #   text = paste("First death"),
-  #   xref = "x",
-  #   yref = "y",
-  #   arrowhead = 5,
-  #   arrowhead = 3,
-  #   arrowsize = 1,
-  #   showarrow = TRUE,
-  #   ax = -90,
-  #   ay = -90
-  # ) %>%
-  # plotly::add_annotations(
-  #   x = as.Date("2020-03-18"),
-  #   y = 14,
-  #   text = paste(
-  #     "New containment",
-  #     "",
-  #     "measures"
-  #   ),
-  #   xref = "x",
-  #   yref = "y",
-  #   arrowhead = 5,
-  #   arrowhead = 3,
-  #   arrowsize = 1,
-  #   showarrow = TRUE,
-  #   ax = -10,
-  #   ay = -90
-  # ) %>%
-  plotly::layout(
-    title = "",
-    yaxis = list(title = "Número acumulado de casos", range = c(-0.1,5)),
-    #xaxis = list(title = "Fecha"),
-    xaxis = list(
-        type = 'date',
-        title = "Fecha"),#, 
-        #tickformat = "%d %B (%a)<br>%Y"),
-    legend = list(x = 0.1, y = 0.9),
-    hovermode = "compare"
-  )
+#   ay = -90
+# ) %>%
+# plotly::add_annotations(
+#   x = as.Date("2020-03-11"),
+#   y = 3,
+#   text = paste("First death"),
+#   xref = "x",
+#   yref = "y",
+#   arrowhead = 5,
+#   arrowhead = 3,
+#   arrowsize = 1,
+#   showarrow = TRUE,
+#   ax = -90,
+#   ay = -90
+# ) %>%
+# plotly::add_annotations(
+#   x = as.Date("2020-03-18"),
+#   y = 14,
+#   text = paste(
+#     "New containment",
+#     "",
+#     "measures"
+#   ),
+#   xref = "x",
+#   yref = "y",
+#   arrowhead = 5,
+#   arrowhead = 3,
+#   arrowsize = 1,
+#   showarrow = TRUE,
+#   ax = -10,
+#   ay = -90
+# ) %>%
+plotly::layout(
+  title = "",
+  yaxis = list(title = "Número acumulado de casos", range = c(-0.1,5)),
+  #xaxis = list(title = "Fecha"),
+  xaxis = list(
+    type = 'date',
+    title = "Fecha"),#, 
+  #tickformat = "%d %B (%a)<br>%Y"),
+  legend = list(x = 0.1, y = 0.9),
+  hovermode = "compare"
+)
 ```
 
 
@@ -349,6 +352,35 @@ valueBox(
 )
 ```
 
+Row 
+-----------------------------------------------------------------------
+
+### Casos importados
+
+```{r}
+importados <- 100*totales_País_mas_reciente$Importados/totales_País_mas_reciente$CasosAcum
+gauge(round(importados, 1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
+
+### Casos por contacto estrecho con casos confirmados
+
+```{r}
+contacto_estrecho <- 100*totales_País_mas_reciente$Estrechos/totales_País_mas_reciente$CasosAcum
+gauge(round(contacto_estrecho,1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
+
+### Casos aun en investigación epidemiológica
+
+```{r}
+en_investigacion <- 100 - importados - contacto_estrecho
+gauge(round(en_investigacion,1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
 
 
 Row
@@ -516,42 +548,3 @@ map_object %>%
   )
 ```
 
-
-
-
-
-<!-- About -->
-<!-- ======================================================================= -->
-
-<!-- **The Coronavirus Dashboard: the case of Argentina** -->
-
-<!-- This Coronavirus dashboard: the case of Argentina provides an overview of the 2019 Novel Coronavirus COVID-19 (2019-nCoV) epidemic for Argentina. This dashboard is built with R using the R Makrdown framework and was adapted from this [dashboard](https://ramikrispin.github.io/coronavirus_dashboard/){target="_blank"} by Rami Krispin. -->
-
-<!-- **Code** -->
-
-<!-- The code behind this dashboard is available on [GitHub](https://github.com/AntoineSoetewey/coronavirus_dashboard){target="_blank"}. -->
-
-<!-- **Data** -->
-
-<!-- The input data for this dashboard is the dataset available from the [`{coronavirus}`](https://github.com/RamiKrispin/coronavirus){target="_blank"} R package. Make sure to download the development version of the package to have the latest data: -->
-
-<!-- ``` -->
-<!-- install.packages("devtools") -->
-<!-- devtools::install_github("RamiKrispin/coronavirus") -->
-<!-- ``` -->
-
-<!-- The data and dashboard are refreshed on a daily basis. -->
-
-<!-- The raw data is pulled from the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus [repository](https://github.com/RamiKrispin/coronavirus-csv){target="_blank"}. -->
-
-<!-- **Contact** -->
-
-<!-- For any question or feedback, you can [contact me](https://www.statsandr.com/contact/). More information about this dashboard can be found in this [article](https://www.statsandr.com/blog/how-to-create-a-simple-coronavirus-dashboard-specific-to-your-country-in-r/). -->
-
-<!-- **Update** -->
-
-<!-- The data is as of `r format(max(coronavirus$date), "%A %B %d, %Y")` and the dashboard has been updated on `r format(Sys.time(), "%A %B %d, %Y")`. -->
-
-
-
-<!-- *Go back to [www.statsandr.com](https://www.statsandr.com/) (blog) or [www.antoinesoetewey.com](https://www.antoinesoetewey.com/) (personal website)*. -->
