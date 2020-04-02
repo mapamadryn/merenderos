@@ -1,5 +1,5 @@
 ---
-title: "Situación de COVID-19 en Chubut"
+title: "COVID-19 en Chubut"
 author: 
 output: 
   flexdashboard::flex_dashboard:
