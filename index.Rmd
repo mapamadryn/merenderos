@@ -365,8 +365,9 @@ Row
   
 ### **Casos confirmados acumulados por provincia**
 
+<a href="https://raw.githubusercontent.com/lucasbandieri/testeo/gh-pages/gganim.gif" target="_blank">
 <img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" height="100%"/>    
-
+</a>
 
 
 
