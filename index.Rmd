@@ -373,7 +373,7 @@ gauge(round(contacto_estrecho,1), min = 0, max = 100, symbol = '%', gaugeSectors
 ))
 ```
 
-### Casos por contacto estrecho con casos confirmados
+### Casos de circulación <br>comunitaria
 
 ```{r}
 circulacion_comunitaria <- 100*totales_País_mas_reciente$circulacion_comunitaria/totales_País_mas_reciente$CasosAcum
@@ -383,7 +383,7 @@ gauge(round(circulacion_comunitaria,1), min = 0, max = 100, symbol = '%', gaugeS
 ```
 
 
-### Casos aun en <br>investigación epidemiológica
+### Casos aun en investigación <br>epidemiológica
 
 ```{r}
 en_investigacion <- 100 - importados - contacto_estrecho - circulacion_comunitaria
