@@ -355,7 +355,7 @@ valueBox(
 Row 
 -----------------------------------------------------------------------
 
-### Casos importados
+### Casos <br>importados
 
 ```{r}
 importados <- 100*totales_País_mas_reciente$Importados/totales_País_mas_reciente$CasosAcum
@@ -373,10 +373,20 @@ gauge(round(contacto_estrecho,1), min = 0, max = 100, symbol = '%', gaugeSectors
 ))
 ```
 
-### Casos aun en investigación epidemiológica
+### Casos por contacto estrecho con casos confirmados
 
 ```{r}
-en_investigacion <- 100 - importados - contacto_estrecho
+circulacion_comunitaria <- 100*totales_País_mas_reciente$circulacion_comunitaria/totales_País_mas_reciente$CasosAcum
+gauge(round(circulacion_comunitaria,1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
+
+
+### Casos aun en <br>investigación epidemiológica
+
+```{r}
+en_investigacion <- 100 - importados - contacto_estrecho - circulacion_comunitaria
 gauge(round(en_investigacion,1), min = 0, max = 100, symbol = '%', gaugeSectors(
   danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
 ))
