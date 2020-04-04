@@ -55,6 +55,8 @@ library(gsheet)
 informes_Chubut <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1b3NYFb2I9dUyJXmC6OucDTOpns4FQPWGaNt66opjw-A/edit?usp=sharing')
 
 informes_Chubut$Fecha <- as.Date(informes_Chubut$Fecha, format="%d/%m/%Y")
+informes_Chubut$Fecha_español <- format.Date(informes_Chubut$Fecha, "%d %b %Y", locale=locale("es"))
+
 informes_Chubut$confirmados_acum <- informes_Chubut$`Casos Confirmados acumulados`
 informes_Chubut$muertos_acum <- informes_Chubut$`Casos de muerte acumulados`
 
@@ -224,7 +226,9 @@ plotly::layout(
   #xaxis = list(title = "Fecha"),
   xaxis = list(
     type = 'date',
-    title = "Fecha"),#, 
+    title = "Fecha"),#,, tickangle=-90, type='category', 
+            #ticktext=as.list(informes_Chubut$Fecha_español), 
+            #tickvals=as.list(informes_Chubut$Fecha)),#, 
   #tickformat = "%d %B (%a)<br>%Y"),
   legend = list(x = 0.1, y = 0.9),
   hovermode = "compare"
