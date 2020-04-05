@@ -357,7 +357,9 @@ valueBox(
 )
 ```
 
-Row 
+
+
+Row {data-height=200}
 -----------------------------------------------------------------------
 
 ### Casos <br>importados
@@ -398,15 +400,8 @@ gauge(round(en_investigacion,1), min = 0, max = 100, symbol = '%', gaugeSectors(
 ```
 
 
-Row
+Row {data-height=600}
 -----------------------------------------------------------------------
-  
-### **Casos confirmados acumulados por provincia**
-
-<a href="https://raw.githubusercontent.com/lucasbandieri/testeo/gh-pages/gganim.gif" target="_blank">
-<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" height="100%"/>    
-</a>
-
 
 
 ### **Casos acumulados diarios** (todo el País)
@@ -498,6 +493,17 @@ plotly::layout(
     hovermode = "compare")
 
 ```
+
+
+Provincias
+=======================================================================
+
+Row {data-height=1400}
+-----------------------------------------------------------------------
+  
+### **Casos confirmados acumulados por provincia**
+
+<div class="flourish-embed flourish-bar-chart-race" data-src="visualisation/1806328" data-url="https://flo.uri.sh/visualisation/1806328/embed"><script src="https://public.flourish.studio/resources/embed.js"></script></div>
 
 
 
