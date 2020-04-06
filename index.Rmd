@@ -371,7 +371,7 @@ gauge(round(importados, 1), min = 0, max = 100, symbol = '%', gaugeSectors(
 ))
 ```
 
-### Casos por contacto estrecho con casos confirmados
+### Casos por contacto estrecho <br>con casos confirmados
 
 ```{r}
 contacto_estrecho <- 100*totales_País_mas_reciente$Estrechos/totales_País_mas_reciente$CasosAcum
