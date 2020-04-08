@@ -121,20 +121,17 @@ valueBox(
 ```
 
 
-
-
-
 ### death {.value-box}
 
 ```{r}
 
 valueBox(
-  value = paste(format(totales_País_mas_reciente$FallecAcum, big.mark = "."), " (",
-                format(round(100 * totales_País_mas_reciente$FallecAcum / totales_País_mas_reciente$CasosAcum, 1), decimal.mark = ","),
-                "%)",
+  value = paste(format(totales_País_mas_reciente$FallecAcum, big.mark = "."), #" (",
+                #format(round(100 * totales_País_mas_reciente$FallecAcum / totales_País_mas_reciente$CasosAcum, 1), decimal.mark = ","),
+                #"%)",
                 sep = ""
   ),
-  caption = "Casos de muerte (tasa de mortalidad [100*Casos de muerte/Casos confirmados])",
+  caption = "Casos de muerte", # (tasa de mortalidad [100*Casos de muerte/Casos confirmados])
   icon = "fas fa-heart-broken",
   color = death_color
 )
@@ -396,12 +393,12 @@ valueBox(
 ```{r}
 
 valueBox(
-  value = paste(format(casos_muerte_Chubut, big.mark = "."), " (",
-    round(100 * casos_muerte_Chubut / casos_confirmados_Chubut, 1),
-    "%)",
+  value = paste(format(casos_muerte_Chubut, big.mark = "."), #" (",
+    #round(100 * casos_muerte_Chubut / casos_confirmados_Chubut, 1),
+    #"%)",
     sep = ""
   ),
-  caption = "Casos de muerte (tasa de mortalidad [100*Casos de muerte/Casos confirmados])",
+  caption = "Casos de muerte", # (tasa de mortalidad [100*Casos de muerte/Casos confirmados])
   icon = "fas fa-heart-broken",
   color = death_color
 )
