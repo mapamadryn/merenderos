@@ -343,7 +343,7 @@ pal <- colorBin("YlOrRd", domain = IND_adm1$Confirmados_acum, bins = bins)
 
 #str(IND_adm1@data)
 
-mapa_Arg <- leaflet() %>% addProviderTiles(providers$OpenStreetMap) %>% 
+mapa_Arg <- leaflet() %>% addProviderTiles(providers$Stamen.TerrainBackground) %>% #OpenStreetMap
   addPolygons(data=IND_adm1, 
               fillColor = ~pal(Confirmados_acum),
               weight = 2,
