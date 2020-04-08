@@ -10,9 +10,16 @@ output:
     vertical_layout: fill
     logo: logo - CENPAT_48x60.png
     favicon: logo - CENPAT_48x60.png
-
-
 ---
+<style>                     
+.navbar {
+  background-color: #0b335e;
+  border-color:black;
+}
+.navbar-brand {
+color:white!important;
+}
+</style>  
 
 
 
@@ -93,6 +100,272 @@ df_daily <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas
 
 # df1 <- coronavirus %>% dplyr::filter(date == max(date))
 df1 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df1.csv", sep=",")
+
+```
+
+
+Resumen País
+=======================================================================
+
+  Row {data-width=400}
+-----------------------------------------------------------------------
+### confirmed {.value-box}
+  
+```{r}
+valueBox(
+  value = paste(format(totales_País_mas_reciente$CasosAcum, big.mark = "."), "", sep = " "),
+  caption = "Total de casos confirmados",
+  icon = "fas fa-user-md",
+  color = confirmed_color
+)
+```
+
+
+
+
+
+### death {.value-box}
+
+```{r}
+
+valueBox(
+  value = paste(format(totales_País_mas_reciente$FallecAcum, big.mark = "."), " (",
+                format(round(100 * totales_País_mas_reciente$FallecAcum / totales_País_mas_reciente$CasosAcum, 1), decimal.mark = ","),
+                "%)",
+                sep = ""
+  ),
+  caption = "Casos de muerte (tasa de mortalidad [100*Casos de muerte/Casos confirmados])",
+  icon = "fas fa-heart-broken",
+  color = death_color
+)
+```
+
+
+
+Row {data-height=200}
+-----------------------------------------------------------------------
+
+### Casos <br>importados
+
+```{r}
+importados <- 100*totales_País_mas_reciente$Importados/totales_País_mas_reciente$CasosAcum
+gauge(round(importados, 1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
+
+### Casos por contacto estrecho <br>con casos confirmados
+
+```{r}
+contacto_estrecho <- 100*totales_País_mas_reciente$Estrechos/totales_País_mas_reciente$CasosAcum
+gauge(round(contacto_estrecho,1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
+
+### Casos de circulación <br>comunitaria
+
+```{r}
+circulacion_comunitaria <- 100*totales_País_mas_reciente$circulacion_comunitaria/totales_País_mas_reciente$CasosAcum
+gauge(round(circulacion_comunitaria,1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
+
+
+### Casos aun en investigación <br>epidemiológica
+
+```{r}
+en_investigacion <- 100 - importados - contacto_estrecho - circulacion_comunitaria
+gauge(round(en_investigacion,1), min = 0, max = 100, symbol = '%', gaugeSectors(
+  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
+))
+```
+
+
+Row {data-height=600}
+-----------------------------------------------------------------------
+
+
+### **Casos acumulados diarios** (todo el País)
+    
+```{r}
+plotly::plot_ly(data = totales_País) %>%
+  plotly::add_trace(
+    x = ~Fecha,
+    # y = ~active_cum,
+    y = ~CasosAcum,
+    type = "scatter",
+    mode = "lines+markers",
+    # name = "Active",
+    name = "Confirmados",
+    line = list(color = active_color),
+    marker = list(color = active_color)
+  ) %>%
+  plotly::add_trace(
+    x = ~Fecha,
+    y = ~FallecAcum,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Muertes",
+    line = list(color = death_color),
+    marker = list(color = death_color)
+  ) %>%
+  plotly::add_annotations(
+    x = as.Date("2020-03-03"),
+    y = 0.1,
+    text = paste("Primer caso<br>en Argentina"),
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 1,
+    showarrow = TRUE,
+    ax = 2,
+    ay = -70
+  ) %>%
+  # plotly::add_annotations(
+  #   x = as.Date("2020-02-04"),
+  #   y = 1,
+  #   text = paste("First case"),
+  #   xref = "x",
+  #   yref = "y",
+  #   arrowhead = 5,
+  #   arrowhead = 3,
+  #   arrowsize = 1,
+  #   showarrow = TRUE,
+  #   ax = -10,
+#   ay = -90
+# ) %>%
+# plotly::add_annotations(
+#   x = as.Date("2020-03-11"),
+#   y = 3,
+#   text = paste("First death"),
+#   xref = "x",
+#   yref = "y",
+#   arrowhead = 5,
+#   arrowhead = 3,
+#   arrowsize = 1,
+#   showarrow = TRUE,
+#   ax = -90,
+#   ay = -90
+# ) %>%
+# plotly::add_annotations(
+#   x = as.Date("2020-03-18"),
+#   y = 14,
+#   text = paste(
+#     "New containment",
+#     "",
+#     "measures"
+#   ),
+#   xref = "x",
+#   yref = "y",
+#   arrowhead = 5,
+#   arrowhead = 3,
+#   arrowsize = 1,
+#   showarrow = TRUE,
+#   ax = -10,
+#   ay = -90
+# ) %>%
+plotly::layout(
+  title = "",
+  yaxis = list(title = "Número acumulado de casos"), #range = c(-0.1,5)),
+  #xaxis = list(title = "Fecha"),
+  xaxis = list(type = 'date', title = "Fecha"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare")
+
+```
+
+
+Provincias
+=======================================================================
+
+Row {data-height=1400}
+-----------------------------------------------------------------------
+  
+### **Casos confirmados acumulados por provincia** *(para reiniciar la animación recargue la página en su navegador o pulse sobre la imagen)*
+
+<a href="https://raw.githubusercontent.com/lucasbandieri/testeo/gh-pages/gganim.gif" target="_blank">
+<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" height="100%"/>    
+</a>
+
+
+
+
+
+
+Mapa País
+=======================================================================
+
+### **Casos en Argentina** (*use los iconos + y - para acercar / alejar*)
+
+```{r}
+### adaptado del ejemplo: https://rstudio.github.io/leaflet/choropleths.html
+
+library(maptools)
+library(leaflet)
+library(htmltools)
+library(htmlwidgets)
+
+IND_adm1 <- readShapeSpatial("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/IGN/Provincias_Argentina_sin_Antartida_ni_Malvinas.shp")
+proj4string(IND_adm1) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")
+
+IND_adm1$Provincia <- c("Santiago del Estero", "Misiones", "Catamarca", "Chaco", "Formosa", "Salta", "Jujuy", "CABA", 
+                        "Tierra del Fuego", "Santa Cruz", "Chubut", "Neuquén", "Río Negro", "La Pampa", "Buenos Aires",
+                        "Mendoza", "San Luis", "Entre Ríos", "Córdoba", "San Juan",  "Santa Fe", "La Rioja", "Tucumán", "Corrientes")
+
+
+library(gsheet)
+por_provincia <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1zUECZoe7nM1QcXIgMRMq3OR2Ui_j1EwggAoY2E_88pw/edit?usp=sharing")
+por_provincia_mas_reciente  <- por_provincia %>% dplyr::filter(Fecha == max(Fecha))
+# #unique(por_provincia_mas_reciente$Provincia)
+library(tidyr)
+por_provincia_mas_reciente_transp  <- gather(por_provincia_mas_reciente, Clase, Conteo, -Provincia, -Fecha, -Long, -Lat, -Fuente)
+por_provincia_mas_reciente_transp <- por_provincia_mas_reciente_transp  %>% dplyr::filter(Clase != "Confirmados_acum")
+por_provincia_mas_reciente_transp$log_cases <- 2 * log(por_provincia_mas_reciente_transp$Conteo)
+
+
+IND_adm1 <- merge(IND_adm1, por_provincia_mas_reciente, by = "Provincia")
+
+IND_adm1$Texto <- with(IND_adm1, paste0('<p>', IND_adm1$Provincia,'<p></p>',
+                                        '<p>',"Confirmados: ", IND_adm1$Confirmados_acum,  '<p></p>', "Fallecidos: ", IND_adm1$Fallecidos_acum,  '</p>',
+                                        '<p>',"Recuperados: ", IND_adm1$Recuperados_acum, '<p></p>',"Activos: ", IND_adm1$Activos_acum,  '</p>'))
+
+
+library(leaflet)
+paleta_colores <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1y8cgZNJtkaSsKI87S_CxG-QpyJvGAXQZ-VwjFytat7c/edit?usp=sharing")
+pal_ap <- colorFactor(paleta_colores$Color_hex, domain = paleta_colores$Provincia) #paleta_colores$Color_hex
+
+
+bins <- c(0, 1, 10, 20, 50, 100, 200, 500, 1000)
+pal <- colorBin("YlOrRd", domain = IND_adm1$Confirmados_acum, bins = bins)
+
+#str(IND_adm1@data)
+
+mapa_Arg <- leaflet() %>% addProviderTiles(providers$OpenStreetMap) %>% 
+  addPolygons(data=IND_adm1, 
+              fillColor = ~pal(Confirmados_acum),
+              weight = 2,
+              opacity = 1,
+              color = "white",
+              dashArray = "3",
+              fillOpacity = 0.7,
+              highlight = highlightOptions(
+                weight = 5,
+                color = "#666",
+                dashArray = "",
+                fillOpacity = 0.7,
+                bringToFront = TRUE),
+              #color= ~pal_ap(Provincia), 
+              label = lapply(IND_adm1$Texto, htmltools::HTML),
+              labelOptions = labelOptions(
+                style = list("font-weight" = "normal", padding = "3px 8px"),
+                textsize = "10px",
+                direction = "auto"))  
+
+mapa_Arg %>% addLegend(pal = pal, values = IND_adm1$Confirmados_acum, opacity = 0.7, title = "Casos confirmados",
+                                                    position = "bottomright")
 
 ```
 
@@ -318,271 +591,5 @@ map_object %>%
                    baseGroups = names(cv_data_for_plot.split),
                    options = layersControlOptions(collapsed = TRUE))%>%
                   addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)# %>% hideGroup("Casos Confirmados fuera de la provincia") %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  
-```
-
-
-Resumen País
-=======================================================================
-
-  Row {data-width=400}
------------------------------------------------------------------------
-### confirmed {.value-box}
-  
-```{r}
-valueBox(
-  value = paste(format(totales_País_mas_reciente$CasosAcum, big.mark = "."), "", sep = " "),
-  caption = "Total de casos confirmados",
-  icon = "fas fa-user-md",
-  color = confirmed_color
-)
-```
-
-
-
-
-
-### death {.value-box}
-
-```{r}
-
-valueBox(
-  value = paste(format(totales_País_mas_reciente$FallecAcum, big.mark = "."), " (",
-                format(round(100 * totales_País_mas_reciente$FallecAcum / totales_País_mas_reciente$CasosAcum, 1), decimal.mark = ","),
-                "%)",
-                sep = ""
-  ),
-  caption = "Casos de muerte (tasa de mortalidad [100*Casos de muerte/Casos confirmados])",
-  icon = "fas fa-heart-broken",
-  color = death_color
-)
-```
-
-
-
-Row {data-height=200}
------------------------------------------------------------------------
-
-### Casos <br>importados
-
-```{r}
-importados <- 100*totales_País_mas_reciente$Importados/totales_País_mas_reciente$CasosAcum
-gauge(round(importados, 1), min = 0, max = 100, symbol = '%', gaugeSectors(
-  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
-))
-```
-
-### Casos por contacto estrecho <br>con casos confirmados
-
-```{r}
-contacto_estrecho <- 100*totales_País_mas_reciente$Estrechos/totales_País_mas_reciente$CasosAcum
-gauge(round(contacto_estrecho,1), min = 0, max = 100, symbol = '%', gaugeSectors(
-  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
-))
-```
-
-### Casos de circulación <br>comunitaria
-
-```{r}
-circulacion_comunitaria <- 100*totales_País_mas_reciente$circulacion_comunitaria/totales_País_mas_reciente$CasosAcum
-gauge(round(circulacion_comunitaria,1), min = 0, max = 100, symbol = '%', gaugeSectors(
-  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
-))
-```
-
-
-### Casos aun en investigación <br>epidemiológica
-
-```{r}
-en_investigacion <- 100 - importados - contacto_estrecho - circulacion_comunitaria
-gauge(round(en_investigacion,1), min = 0, max = 100, symbol = '%', gaugeSectors(
-  danger = c(80, 100), warning = c(40, 79), success = c(0, 39)
-))
-```
-
-
-Row {data-height=600}
------------------------------------------------------------------------
-
-
-### **Casos acumulados diarios** (todo el País)
-    
-```{r}
-plotly::plot_ly(data = totales_País) %>%
-  plotly::add_trace(
-    x = ~Fecha,
-    # y = ~active_cum,
-    y = ~CasosAcum,
-    type = "scatter",
-    mode = "lines+markers",
-    # name = "Active",
-    name = "Confirmados",
-    line = list(color = active_color),
-    marker = list(color = active_color)
-  ) %>%
-  plotly::add_trace(
-    x = ~Fecha,
-    y = ~FallecAcum,
-    type = "scatter",
-    mode = "lines+markers",
-    name = "Muertes",
-    line = list(color = death_color),
-    marker = list(color = death_color)
-  ) %>%
-  plotly::add_annotations(
-    x = as.Date("2020-03-03"),
-    y = 0.1,
-    text = paste("Primer caso<br>en Argentina"),
-    xref = "x",
-    yref = "y",
-    arrowhead = 5,
-    arrowhead = 3,
-    arrowsize = 1,
-    showarrow = TRUE,
-    ax = 2,
-    ay = -70
-  ) %>%
-  # plotly::add_annotations(
-  #   x = as.Date("2020-02-04"),
-  #   y = 1,
-  #   text = paste("First case"),
-  #   xref = "x",
-  #   yref = "y",
-  #   arrowhead = 5,
-  #   arrowhead = 3,
-  #   arrowsize = 1,
-  #   showarrow = TRUE,
-  #   ax = -10,
-#   ay = -90
-# ) %>%
-# plotly::add_annotations(
-#   x = as.Date("2020-03-11"),
-#   y = 3,
-#   text = paste("First death"),
-#   xref = "x",
-#   yref = "y",
-#   arrowhead = 5,
-#   arrowhead = 3,
-#   arrowsize = 1,
-#   showarrow = TRUE,
-#   ax = -90,
-#   ay = -90
-# ) %>%
-# plotly::add_annotations(
-#   x = as.Date("2020-03-18"),
-#   y = 14,
-#   text = paste(
-#     "New containment",
-#     "",
-#     "measures"
-#   ),
-#   xref = "x",
-#   yref = "y",
-#   arrowhead = 5,
-#   arrowhead = 3,
-#   arrowsize = 1,
-#   showarrow = TRUE,
-#   ax = -10,
-#   ay = -90
-# ) %>%
-plotly::layout(
-  title = "",
-  yaxis = list(title = "Número acumulado de casos"), #range = c(-0.1,5)),
-  #xaxis = list(title = "Fecha"),
-  xaxis = list(type = 'date', title = "Fecha"),
-    legend = list(x = 0.1, y = 0.9),
-    hovermode = "compare")
-
-```
-
-
-Provincias
-=======================================================================
-
-Row {data-height=1400}
------------------------------------------------------------------------
-  
-### **Casos confirmados acumulados por provincia** *(para reiniciar la animación haga clic sobre el gráfico)*
-
-<a href="https://raw.githubusercontent.com/lucasbandieri/testeo/gh-pages/gganim.gif" target="_blank">
-<img src="/mnt/28EC75CE33EA541A/temporales/Coronavirus/testeo_web/gganim.gif" class="img-responsive" height="100%"/>    
-</a>
-
-
-
-
-
-
-Mapa País
-=======================================================================
-
-### **Casos en Argentina** (*use los iconos + y - para acercar / alejar*)
-
-```{r}
-### adaptado del ejemplo: https://rstudio.github.io/leaflet/choropleths.html
-
-library(maptools)
-library(leaflet)
-library(htmltools)
-library(htmlwidgets)
-
-IND_adm1 <- readShapeSpatial("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/IGN/Provincias_Argentina_sin_Antartida_ni_Malvinas.shp")
-proj4string(IND_adm1) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")
-
-IND_adm1$Provincia <- c("Santiago del Estero", "Misiones", "Catamarca", "Chaco", "Formosa", "Salta", "Jujuy", "CABA", 
-                        "Tierra del Fuego", "Santa Cruz", "Chubut", "Neuquén", "Río Negro", "La Pampa", "Buenos Aires",
-                        "Mendoza", "San Luis", "Entre Ríos", "Córdoba", "San Juan",  "Santa Fe", "La Rioja", "Tucumán", "Corrientes")
-
-
-library(gsheet)
-por_provincia <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1zUECZoe7nM1QcXIgMRMq3OR2Ui_j1EwggAoY2E_88pw/edit?usp=sharing")
-por_provincia_mas_reciente  <- por_provincia %>% dplyr::filter(Fecha == max(Fecha))
-# #unique(por_provincia_mas_reciente$Provincia)
-library(tidyr)
-por_provincia_mas_reciente_transp  <- gather(por_provincia_mas_reciente, Clase, Conteo, -Provincia, -Fecha, -Long, -Lat, -Fuente)
-por_provincia_mas_reciente_transp <- por_provincia_mas_reciente_transp  %>% dplyr::filter(Clase != "Confirmados_acum")
-por_provincia_mas_reciente_transp$log_cases <- 2 * log(por_provincia_mas_reciente_transp$Conteo)
-
-
-IND_adm1 <- merge(IND_adm1, por_provincia_mas_reciente, by = "Provincia")
-
-IND_adm1$Texto <- with(IND_adm1, paste0('<p>', IND_adm1$Provincia,'<p></p>',
-                                        '<p>',"Confirmados: ", IND_adm1$Confirmados_acum,  '<p></p>', "Fallecidos: ", IND_adm1$Fallecidos_acum,  '</p>',
-                                        '<p>',"Recuperados: ", IND_adm1$Recuperados_acum, '<p></p>',"Activos: ", IND_adm1$Activos_acum,  '</p>'))
-
-
-library(leaflet)
-paleta_colores <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1y8cgZNJtkaSsKI87S_CxG-QpyJvGAXQZ-VwjFytat7c/edit?usp=sharing")
-pal_ap <- colorFactor(paleta_colores$Color_hex, domain = paleta_colores$Provincia) #paleta_colores$Color_hex
-
-
-bins <- c(0, 1, 10, 20, 50, 100, 200, 500, 1000)
-pal <- colorBin("YlOrRd", domain = IND_adm1$Confirmados_acum, bins = bins)
-
-#str(IND_adm1@data)
-
-mapa_Arg <- leaflet() %>% addProviderTiles(providers$OpenStreetMap) %>% 
-  addPolygons(data=IND_adm1, 
-              fillColor = ~pal(Confirmados_acum),
-              weight = 2,
-              opacity = 1,
-              color = "white",
-              dashArray = "3",
-              fillOpacity = 0.7,
-              highlight = highlightOptions(
-                weight = 5,
-                color = "#666",
-                dashArray = "",
-                fillOpacity = 0.7,
-                bringToFront = TRUE),
-              #color= ~pal_ap(Provincia), 
-              label = lapply(IND_adm1$Texto, htmltools::HTML),
-              labelOptions = labelOptions(
-                style = list("font-weight" = "normal", padding = "3px 8px"),
-                textsize = "10px",
-                direction = "auto"))  
-
-mapa_Arg %>% addLegend(pal = pal, values = IND_adm1$Confirmados_acum, opacity = 0.7, title = "Casos confirmados",
-                                                    position = "bottomright")
-
 ```
 
