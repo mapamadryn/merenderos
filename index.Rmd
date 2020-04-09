@@ -603,7 +603,7 @@ Información útil
 * En algunos casos pérdida temporal de olfato y gusto
 
 En caso de tener alguno de los síntomas de Coronavirus **NO ASISTAS A LA GUARDIA DEL HOSPITAL**, comunicate al **0800-222-2676 (CORO)** o al **0800-222-1002**. 
-Solo para emergencias en la provincia de Chubut comunicate al 107.
+Solo para emergencias en la provincia de Chubut comunicate al **107**.
 Si durante el aislamiento obligatorio necesitás orientación profesional podes llamar al Hospital Isola de 8 a 14hs al **2804451240** int. **1123** o mandar un email a saludmentalpm@gmail.com indicando tu nombre, DNI y número de teléfono para que te contacten. 
 
 **Medidas de prevención**
@@ -634,7 +634,7 @@ Sobre esta página
 
 **Bases de datos**
 
-Los datos analizados en este enlace fueron obtenidos y son actualizados con información proveniente los informes diarios realizados por el Ministerio de Salud de Nación (https://www.argentina.gob.ar/coronavirus/informe-diario) y los reportes diarios provinciales generados por el Ministerio de Salud de la Provincia de Chubut (http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus-personal-salud/).
+Los datos analizados en este enlace fueron obtenidos y son actualizados con información proveniente de los informes diarios realizados por el Ministerio de Salud de Nación (https://www.argentina.gob.ar/coronavirus/informe-diario) y de los reportes diarios provinciales generados por el Ministerio de Salud de la Provincia de Chubut (http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus-personal-salud/).
 
 
 
