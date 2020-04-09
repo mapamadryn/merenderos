@@ -519,74 +519,151 @@ Column {data-width=400}
 ### **Casos en Chubut** (*use los iconos + y - para acercar / alejar*)
 
 ```{r}
+### adaptado del ejemplo: https://rstudio.github.io/leaflet/choropleths.html
+
+library(maptools)
+library(leaflet)
+library(htmltools)
+library(htmlwidgets)
+
+IND_adm1 <- readShapeSpatial("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/Ministerio_Salud_Chubut/Chubut_poligonos_Areas_programaticas_coronavirus.shp")
+proj4string(IND_adm1) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")
+
+IND_adm1$Región_larga <- c("Área Programática Comodoro Rivadavia", "Área Programática Esquel", "Área Programática Norte", "Área Programática Trelew")
+
+
+library(gsheet)
+reportes_Chubut <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1b3NYFb2I9dUyJXmC6OucDTOpns4FQPWGaNt66opjw-A/edit?usp=sharing")
+reportes_Chubut$Fecha <- as.Date(reportes_Chubut$Fecha, format = "%d/%m/%Y")
+reportes_Chubut_mas_reciente  <- reportes_Chubut %>% dplyr::filter(Fecha == max(Fecha))
+reportes_Chubut_mas_reciente$NOMBRE <- reportes_Chubut_mas_reciente$Región
+
+library(dplyr)
+# Drop the columns of the dataframe
+reportes_Chubut_mas_reciente <- select (reportes_Chubut_mas_reciente ,-c('Casos Sospechosos fuera de la provincia'))
+
+# #unique(por_provincia_mas_reciente$Provincia)
+library(tidyr)
+reportes_Chubut_mas_reciente_transp  <- gather(reportes_Chubut_mas_reciente, Clase, Conteo, -Región, -Fecha, -'Casos de muerte', -'Casos Confirmados acumulados', -'Casos de muerte acumulados')
+#reportes_Chubut_mas_reciente_transp <- por_provincia_mas_reciente_transp  %>% dplyr::filter(Clase != "Confirmados_acum")
+
+#unique(reportes_Chubut_mas_reciente_transp$Clase)
+
+IND_adm1 <- merge(IND_adm1, reportes_Chubut_mas_reciente, by = "NOMBRE")
+
+IND_adm1$Texto <- with(IND_adm1, paste0('<p>', IND_adm1$Región_larga,'<p></p>',
+                                        '<p>',"Confirmados: ", IND_adm1$`Casos Confirmados`,  '<p></p>', "Confirmados fuera de la prov.: ", IND_adm1$`Casos Confirmados fuera de la provincia`,  '</p>',
+                                        '<p>',"Casos Sospechosos con Nexo Epidemiológico: ", IND_adm1$`Casos Sospechosos con Nexo Epidemiológico`, '<p></p>',"Casos Sospechosos IRAG sin Nexo Epidemiológicos: ", IND_adm1$`Casos Sospechosos IRAG sin Nexo Epidemiológico`,  '</p>',
+                                        '<p>',"Contactos Estrechos de casos confirmados: ", IND_adm1$`Contactos Estrechos de casos confirmados`, '<p></p>',"Casos Descartados: ", IND_adm1$`Casos Descartados`,  '</p>',
+                                        '<p>',"Viajeros con Aislamiento Preventivo: ", IND_adm1$`Viajeros con Aislamiento Preventivo`, '<p></p>',"Viajeros con Aislamiento Preventivo Finalizado: ", IND_adm1$`Viajeros con Aislamiento Preventivo Finalizado`,  '</p>'))
+
 
 library(leaflet)
-library(leafpop)
-library(purrr)
-library(sf)
 
-nc <- sf::st_read("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/Ministerio_Salud_Chubut/Chubut_poligonos_Areas_programaticas_coronavirus.shp", quiet = TRUE)
+bins <- c(0, 1, 10, 20, 50, 100, 200, 500, 1000)
+pal <- colorBin("YlOrRd", domain = IND_adm1$`Casos Confirmados`, bins = bins)
 
+#str(IND_adm1@data)
 
-df2 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df2.csv", sep=",")
-df2$Long <- as.numeric(paste(df2$Long))
-df2$Lat <- as.numeric(paste(df2$Lat))
+mapa_Chubut <- leaflet() %>% addProviderTiles(providers$OpenStreetMap) %>% 
+  addPolygons(data=IND_adm1, 
+              fillColor = ~pal(`Casos Confirmados`),
+              weight = 2,
+              opacity = 1,
+              color = "black",
+              dashArray = "3",
+              fillOpacity = 0.3,
+              highlight = highlightOptions(
+                weight = 5,
+                color = "#666",
+                dashArray = "",
+                fillOpacity = 0.7,
+                bringToFront = TRUE),
+              #color= ~pal_ap(Provincia), 
+              label = lapply(IND_adm1$Texto, htmltools::HTML),
+              labelOptions = labelOptions(
+                style = list("font-weight" = "normal", padding = "3px 8px"),
+                textsize = "10px",
+                direction = "auto"))  
 
-#unique(df2$type)
-
-# cv_data_for_plot <- df2 %>%
-#   # dplyr::filter(Country.Region == "Argentina") %>%
-#   dplyr::filter(cases > 0) %>%
-#   dplyr::group_by(Country.Region, Province.State, Lat, Long, type) %>%
-#   dplyr::summarise(cases = sum(cases)) %>%
-#   dplyr::mutate(log_cases = 2 * log(cases)) %>%
-#   dplyr::ungroup()
-cv_data_for_plot.split <- df2 %>% split(df2$type)
-#pal <- colorFactor(c("blue", "green", "red", "orange", "yellow", "purple", "brown"), domain = c("Casos Sospechosos con Nexo Epidemiológico", "Casos Sospechosos IRAG sin Nexo Epidemiológico","Casos Confirmados", "Casos Confirmados fuera de la provincia", "Casos Sospechosos fuera de la provincia", "Casos Descartados", "Contactos Estrechos de casos confirmados", "Viajeros con Aislamiento Preventivo","Viajeros con Aislamiento Preventivo Finalizado"))#"confirmed", "death", "recovered"))
-
-pal_ap <- colorFactor(c("blue", "green", "yellow", "purple"), domain = c("A.P. Comodoro Rivadavia",     
-                                                                         "A.P. Norte",
-                                                                         "A.P. Trelew",                             
-                                                                         "A.P. Esquel"))
-
-map_object <- leaflet() %>% addProviderTiles(providers$Esri.WorldStreetMap) %>%  addPolygons(data = nc, 
-                                                                                             #fillColor = "aliceblue", 
-                                                                                             #color = "grey",
-                                                                                             label = ~NOMBRE,
-                                                                                             color = ~ pal_ap(NOMBRE), fillOpacity = 0.1)
-
-names(cv_data_for_plot.split) %>%
-  purrr::walk(function(df) {
-    map_object <<- map_object %>% 
-      addCircleMarkers(
-        data = cv_data_for_plot.split[[df]],
-        lng = ~Long, lat = ~Lat,
-        label=~as.character(cases),
-        #textOnly = TRUE,
-        #color = ~ pal(type),
-        stroke = FALSE,
-        fillOpacity = 0.8,
-        radius = ~log_cases, #log_cases
-        popup = leafpop::popupTable(cv_data_for_plot.split[[df]],
-                                    feature.id = FALSE,
-                                    row.numbers = FALSE,
-                                    zcol = c("type", "cases", "Country.Region", "Province.State")
-        ),
-        group = df,
-        #                 clusterOptions = markerClusterOptions(removeOutsideVisibleBounds = F),
-        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px", 'color'='black'),
-                                    textsize = "15px", 
-                                    direction = "auto", noHide = TRUE, offset=c(0,-12), textOnly = TRUE#,
-                                    #noHide = F,
-                                    #direction = "auto"
-        )
-      )
-  })
-
-map_object %>%
-  addLayersControl(position = "topright", 
-                   baseGroups = names(cv_data_for_plot.split),
-                   options = layersControlOptions(collapsed = TRUE))%>%
-                  addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)# %>% hideGroup("Casos Confirmados fuera de la provincia") %>% hideGroup("Casos Descartados") %>% hideGroup("Casos Sospechosos con Nexo Epidemiológico") %>% hideGroup("Casos Sospechosos IRAG sin Nexo Epidemiológico")%>% hideGroup("Contactos Estrechos de casos confirmados")%>% hideGroup("Viajeros con Aislamiento Preventivo")  
+mapa_Chubut %>% addLegend(pal = pal, values = IND_adm1$Confirmados_acum, opacity = 0.7, title = "Casos confirmados",
+                       position = "bottomright") %>%
+  addMiniMap(tiles = providers$Esri.WorldStreetMap, width = 120, height=80)
 ```
+
+
+Información útil
+=======================================================================
+
+**Síntomas**
+
+* Fiebre
+* Tos
+* Dolor de garganta
+* En algunos casos pérdida temporal de olfato y gusto
+
+En caso de tener alguno de los síntomas de Coronavirus **NO ASISTAS A LA GUARDIA DEL HOSPITAL**, comunicate al **0800-222-2676 (CORO)** o al **0800-222-1002**. 
+Solo para emergencias en la provincia de Chubut comunicate al 107.
+Si durante el aislamiento obligatorio necesitás orientación profesional podes llamar al Hospital Isola de 8 a 14hs al **2804451240** int. **1123** o mandar un email a saludmentalpm@gmail.com indicando tu nombre, DNI y número de teléfono para que te contacten. 
+
+**Medidas de prevención**
+
+
+* Respetar el aislamiento social preventivo y obligatorio.
+* Distanciamiento social (más de un metro de distancia entre personas).
+* Lavarse las manos con frecuencia utilizando agua y jabón.
+* Solo en ocasiones en donde no tenés acceso a agua y jabón, utilizar alcohol en gel.
+* Toser o estornudar en el pliegue del codo. 
+* No llevarse las manos a los ojos, nariz o boca.
+* Desinfectar objetos provenientes de fuera de casa con una dilución de alcohol (alcohol 70%, aproximadamente 2 partes de alcohol y 1 de agua).
+* Limpiar periódicamente pisos y superficies con agua y lavandina (dilución 10 ml de lavandina por litro de agua, o aproximadamente 1/2 pocillo de café de lavandina comercial de 25g/L, en un balde de agua). Recordá que las superficies deben estar limpias para luego ser desinfectadas. 
+* Se recomienda el uso de tapabocas para aquellos que necesiten salir de casa. Para realizar un tapabocas desde casa visitá este [link](https://patagonianorte.conicet.gov.ar/wp-content/uploads/sites/79/2020/04/Material-General-Mascarillas-IPATEC.pdf).
+
+
+Recordá informarte siempre a través de medios oficiales. En estos enlaces encontrarás información adicional:  
+
+* [Ministerio de Salud Gobierno del Chubut](http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus/)
+* [Argentina.gob.ar](https://www.argentina.gob.ar/salud/coronavirus-COVID-19)
+
+
+
+
+Sobre esta página
+=======================================================================
+
+
+**Bases de datos**
+
+Los datos analizados en este enlace fueron obtenidos y son actualizados con información proveniente los informes diarios realizados por el Ministerio de Salud de Nación (https://www.argentina.gob.ar/coronavirus/informe-diario) y los reportes diarios provinciales generados por el Ministerio de Salud de la Provincia de Chubut (http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus-personal-salud/).
+
+
+
+
+**Coordinador**
+
+Dr. [Julio Lancelotti](https://www.conicet.gov.ar/new_scp/detalle.php?id=25918&keywords=julio+lancelotti&datos_academicos=yes) 
+
+Instituto Patagónico para el Estudio de los Ecosistemas Continentales [IPEEC](https://ipeec.conicet.gov.ar/) CCT CONICET-CENPAT
+
+Contacto: julio@cenpat-conicet.gob.ar
+
+
+
+**Grupo de Trabajo**
+
+Lic. [Lucas Bandieri](https://www.conicet.gov.ar/new_scp/detalle.php?id=39616&keywords=bandieri&datos_academicos=yes) 
+Instituto Patagónico de Ciencias Sociales y Humanas [IPCSH](https://ipcsh.conicet.gov.ar/) CCT CONICET-CENPAT
+
+
+Ing. [Ivana González Bagur](https://www.conicet.gov.ar/new_scp/detalle.php?id=50913&keywords=Ivana+Gonz%C3%A1lez+Bagur&datos_academicos=yes) 
+Instituto Patagónico de Ciencias Sociales y Humanas [IPCSH](https://ipcsh.conicet.gov.ar/) CCT CONICET-CENPAT
+
+Dra. [Noela Sánchez Carnero](https://www.conicet.gov.ar/new_scp/detalle.php?id=54904&keywords=Noela+S%C3%A1nchez+Carnero&datos_academicos=yes) 
+Centro para el Estudio de los Sistemas Marinos [CESIMAR](https://cenpat.conicet.gov.ar/cesimar/) CCT CONICET-CENPAT
+
+Dra. [Luciana Pozzi](https://ri.conicet.gov.ar/author/16078)
+Universidad Nacional de la Patagonia San Juan Bosco ([UNPSJB](http://www.unp.edu.ar/)) / Centro para el Estudio de los Sistemas Marinos [CESIMAR](https://cenpat.conicet.gov.ar/cesimar/) CCT CONICET-CENPAT
+
+Dra. [Gabriela Blanco](https://www.conicet.gov.ar/new_scp/detalle.php?id=41671&keywords=%22Gabriela+Blanco%22&datos_academicos=yes)
+Instituto de Biología de Organismos Marinos [IBIOMAR](https://ibiomar.conicet.gov.ar/) CCT CONICET-CENPAT
 
