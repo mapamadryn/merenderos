@@ -626,8 +626,9 @@ Recordá informarte siempre a través de medios oficiales. En estos enlaces enco
 * [Ministerio de Salud Gobierno del Chubut](http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus/)
 * [Argentina.gob.ar](https://www.argentina.gob.ar/salud/coronavirus-COVID-19)
 
+**Sitios importantes**
 
-
+<iframe src="https://www.google.com/maps/d/embed?mid=1QXRzxB8AKa8_P-WbBzv9nsaobqM6-8j5" width="640" height="480"></iframe>
 
 Sobre esta página
 =======================================================================
