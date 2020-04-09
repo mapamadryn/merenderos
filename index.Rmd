@@ -540,7 +540,7 @@ reportes_Chubut_mas_reciente$NOMBRE <- reportes_Chubut_mas_reciente$Región
 
 library(dplyr)
 # Drop the columns of the dataframe
-reportes_Chubut_mas_reciente <- select (reportes_Chubut_mas_reciente ,-c('Casos Sospechosos fuera de la provincia'))
+#reportes_Chubut_mas_reciente <- select (reportes_Chubut_mas_reciente ,-c('Casos Sospechosos fuera de la provincia'))
 
 # #unique(por_provincia_mas_reciente$Provincia)
 library(tidyr)
@@ -554,6 +554,7 @@ IND_adm1 <- merge(IND_adm1, reportes_Chubut_mas_reciente, by = "NOMBRE")
 IND_adm1$Texto <- with(IND_adm1, paste0('<p>', IND_adm1$Región_larga,'<p></p>',
                                         '<p>',"Confirmados: ", IND_adm1$`Casos Confirmados`,  '<p></p>', "Confirmados fuera de la prov.: ", IND_adm1$`Casos Confirmados fuera de la provincia`,  '</p>',
                                         '<p>',"Casos Sospechosos con Nexo Epidemiológico: ", IND_adm1$`Casos Sospechosos con Nexo Epidemiológico`, '<p></p>',"Casos Sospechosos IRAG sin Nexo Epidemiológicos: ", IND_adm1$`Casos Sospechosos IRAG sin Nexo Epidemiológico`,  '</p>',
+                                        '<p></p>',"Casos Sospechosos fuera de la provincia: ", IND_adm1$`Casos Sospechosos fuera de la provincia`,  '</p>',
                                         '<p>',"Contactos Estrechos de casos confirmados: ", IND_adm1$`Contactos Estrechos de casos confirmados`, '<p></p>',"Casos Descartados: ", IND_adm1$`Casos Descartados`,  '</p>',
                                         '<p>',"Viajeros con Aislamiento Preventivo: ", IND_adm1$`Viajeros con Aislamiento Preventivo`, '<p></p>',"Viajeros con Aislamiento Preventivo Finalizado: ", IND_adm1$`Viajeros con Aislamiento Preventivo Finalizado`,  '</p>'))
 
