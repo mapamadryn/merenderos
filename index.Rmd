@@ -607,6 +607,10 @@ En caso de tener alguno de los síntomas de Coronavirus **NO ASISTAS A LA GUARDI
 Solo para emergencias en la provincia de Chubut comunicate al **107**.
 Si durante el aislamiento obligatorio necesitás orientación profesional podes llamar al Hospital Isola de 8 a 14hs al **2804451240** int. **1123** o mandar un email a saludmentalpm@gmail.com indicando tu nombre, DNI y número de teléfono para que te contacten. 
 
+
+
+&nbsp;
+
 **Medidas de prevención**
 
 
@@ -621,10 +625,16 @@ Si durante el aislamiento obligatorio necesitás orientación profesional podes 
 * Se recomienda el uso de tapabocas para aquellos que necesiten salir de casa. Para realizar un tapabocas desde casa visitá este [link](https://patagonianorte.conicet.gov.ar/wp-content/uploads/sites/79/2020/04/Material-General-Mascarillas-IPATEC.pdf).
 
 
+
+&nbsp;
+
 Recordá informarte siempre a través de medios oficiales. En estos enlaces encontrarás información adicional:  
 
 * [Ministerio de Salud Gobierno del Chubut](http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus/)
 * [Argentina.gob.ar](https://www.argentina.gob.ar/salud/coronavirus-COVID-19)
+
+
+&nbsp;
 
 **Sitios importantes**
 
@@ -634,19 +644,20 @@ Sobre esta página
 =======================================================================
 
 
-**Bases de datos**
-
-Los datos analizados en este enlace fueron obtenidos y son actualizados con información proveniente de los informes diarios realizados por el Ministerio de Salud de Nación (https://www.argentina.gob.ar/coronavirus/informe-diario) y de los reportes diarios provinciales generados por el Ministerio de Salud de la Provincia de Chubut (http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus-personal-salud/).
+>**Bases de datos**
 
 
+>Los datos analizados en este enlace fueron obtenidos y son actualizados con información proveniente de los informes diarios realizados por el Ministerio de Salud de >Nación (https://www.argentina.gob.ar/coronavirus/informe-diario) y de los reportes diarios provinciales generados por el Ministerio de Salud de la Provincia de Chubut >(http://www.ministeriodesalud.chubut.gov.ar/ministerio-de-salud/epidemiologia/coronavirus-personal-salud/).
+
+
+
+&nbsp;
 
 
 **Coordinador**
 
 Dr. [Julio Lancelotti](https://www.conicet.gov.ar/new_scp/detalle.php?id=25918&keywords=julio+lancelotti&datos_academicos=yes) 
-
 Instituto Patagónico para el Estudio de los Ecosistemas Continentales [IPEEC](https://ipeec.conicet.gov.ar/) CCT CONICET-CENPAT
-
 Contacto: julio@cenpat-conicet.gob.ar
 
 
