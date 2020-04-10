@@ -4,8 +4,8 @@ author:
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    #social: menu
-    social: ["facebook", "twitter"]
+    social: menu
+    #social: ["facebook", "twitter"]
     #source_code: embed
     vertical_layout: fill
     logo: logo - CENPAT_48x60.png
@@ -76,7 +76,7 @@ casos_muerte_Chubut <- sum(informes_Chubut_mas_reciente$`Casos de muerte`)
 library(tidyr)
 informes_Chubut_mas_reciente <- gather(informes_Chubut_mas_reciente, Clase, Conteo, -Región, -Fecha)
 
-df <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df.csv")
+#df <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df.csv")
 
 # df_daily <- coronavirus %>%
 #   dplyr::filter(Country.Region == "Argentina") %>%
@@ -96,10 +96,10 @@ df <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tabla
 #     # recovered_cum = cumsum(recovered),
 #     active_cum = cumsum(active)
 #   )
-df_daily <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df_daily.csv", sep=",")
+#df_daily <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df_daily.csv", sep=",")
 
 # df1 <- coronavirus %>% dplyr::filter(date == max(date))
-df1 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df1.csv", sep=",")
+#df1 <- read.csv2("/mnt/28EC75CE33EA541A/temporales/Coronavirus/estadisticas/tablas_de_entrada/df1.csv", sep=",")
 
 ```
 
@@ -113,7 +113,7 @@ Resumen País
   
 ```{r}
 valueBox(
-  value = paste(format(totales_País_mas_reciente$CasosAcum, big.mark = "."), "", sep = " "),
+  value = paste(format(totales_País_mas_reciente$CasosAcum, big.mark = "."), " (", totales_País_mas_reciente$NuevosCasosDia, " en las últimas 24 hs)", "", sep = ""),
   caption = "Total de casos confirmados",
   icon = "fas fa-user-md",
   color = confirmed_color
@@ -126,11 +126,7 @@ valueBox(
 ```{r}
 
 valueBox(
-  value = paste(format(totales_País_mas_reciente$FallecAcum, big.mark = "."), #" (",
-                #format(round(100 * totales_País_mas_reciente$FallecAcum / totales_País_mas_reciente$CasosAcum, 1), decimal.mark = ","),
-                #"%)",
-                sep = ""
-  ),
+  value = paste(format(totales_País_mas_reciente$FallecAcum, big.mark = "."), " (", totales_País_mas_reciente$NuevosFallec, " en las últimas 24 hs)", "", sep = ""),
   caption = "Casos de muerte", # (tasa de mortalidad [100*Casos de muerte/Casos confirmados])
   icon = "fas fa-heart-broken",
   color = death_color
